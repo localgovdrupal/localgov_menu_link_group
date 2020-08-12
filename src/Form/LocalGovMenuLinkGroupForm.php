@@ -106,12 +106,12 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
     $status = $group->save();
 
     if ($status === SAVED_NEW) {
-      $this->messenger()->addMessage($this->t('The %label LocalGov bundle group created.', [
+      $this->messenger()->addMessage($this->t('The %label LocalGov menu link group created.', [
         '%label' => $group->label(),
       ]));
     }
     else {
-      $this->messenger()->addMessage($this->t('The %label LocalGov bundle group updated.', [
+      $this->messenger()->addMessage($this->t('The %label LocalGov menu link group has been updated.', [
         '%label' => $group->label(),
       ]));
     }
