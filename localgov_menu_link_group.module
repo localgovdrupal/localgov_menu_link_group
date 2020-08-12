@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\localgov_menu_link_group\MenuLinkGrouper;
+
+/**
+ * Implements hook_menu_links_discovered_alter().
+ *
+ * The localgov_menu_link_group entities tell us which menu link should go under
+ * which group.  For each group, we generate a menu link.  This menu link serves
+ * as the parent menu link for all the child menu links attached to that entity.
+ */
+function localgov_menu_link_group_menu_links_discovered_alter(array &$menu_links) {
+
+  $active_groups = Drupal::service('entity_type.manager')->getStorage('localgov_menu_link_group')->loadByProperties(['status' => 1]);
+
+  $menu_link_grouper = new MenuLinkGrouper($menu_links);
+  array_walk($active_groups, [$menu_link_grouper, 'groupChildMenuLinks']);
+}
