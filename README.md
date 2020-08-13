@@ -30,7 +30,6 @@ This grouping functionality is not limited to content types only.  It can be app
 - While adding the group, decide where in the menu tree this group should appear.  Choose your selection from the **Parent menu link** dropdown.
 - Use the **Child menu links** dropdown to select the menu links that should come under this new group.
 - Save the Group form.
-- Clear the menu cache or entire Drupal cache.
 - A menu link with your choosen group label should appear in the menu tree under your choosen parent menu link.  This menu link is not clickable.
 - Hovering over this menu link should reveal its child menu links.
 
