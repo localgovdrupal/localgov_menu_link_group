@@ -85,9 +85,7 @@ class MenuGroups extends DeriverBase implements ContainerDeriverInterface {
    */
   public static function create(ContainerInterface $container, $base_plugin_id) {
 
-    return new static(
-      $container->get('entity_type.manager'),
-    );
+    return new static($container->get('entity_type.manager'));
   }
 
   /**
