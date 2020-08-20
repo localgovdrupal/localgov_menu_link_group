@@ -17,6 +17,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
  *     "form" = {
+ *       "default" = "Drupal\localgov_menu_link_group\Form\LocalGovMenuLinkGroupForm",
  *       "add" = "Drupal\localgov_menu_link_group\Form\LocalGovMenuLinkGroupForm",
  *       "edit" = "Drupal\localgov_menu_link_group\Form\LocalGovMenuLinkGroupForm",
  *       "delete" = "Drupal\Core\Entity\EntityDeleteForm",
@@ -54,7 +55,7 @@ class LocalGovMenuLinkGroup extends ConfigEntityBase implements LocalGovMenuLink
 
   public $weight = 0;
 
-  public $parent_menu_link = 'node.add_page';
+  public $parent_menu_link = 'admin:system.admin_content';
 
   public $child_menu_links = [];
 

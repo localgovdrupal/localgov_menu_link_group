@@ -30,11 +30,12 @@ class GroupConfigImportTest extends KernelTestBase {
 
     $this->container->get('module_installer')->install(['group_config_test']);
 
-    $has_group_menu_link = $this->container->get('plugin.manager.menu.link')->hasDefinition('localgov_menu_link_group:localgov_menu_link_group_test');
+    $group_menu_link_id = 'localgov_menu_link_group:localgov_menu_link_group_test';
+    $has_group_menu_link = $this->container->get('plugin.manager.menu.link')->hasDefinition($group_menu_link_id);
     $this->assertTrue($has_group_menu_link);
 
-    $child_menu_links = $this->container->get('plugin.manager.menu.link')->getChildIds('localgov_menu_link_group:localgov_menu_link_group_test');
-    $parent_menu_links = $this->container->get('plugin.manager.menu.link')->getParentIds('localgov_menu_link_group:localgov_menu_link_group_test');
+    $child_menu_links = $this->container->get('plugin.manager.menu.link')->getChildIds($group_menu_link_id);
+    $parent_menu_links = $this->container->get('plugin.manager.menu.link')->getParentIds($group_menu_link_id);
 
     $expected_child_menu_links = [
       'system.performance_settings' => 'system.performance_settings',
