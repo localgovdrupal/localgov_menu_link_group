@@ -5,7 +5,8 @@ dependencies: {  }
 id: localgov_menu_link_group_test
 group_label: Test
 weight: 1
-parent_menu_link: 'admin:system.admin_config_development'
+parent_menu: 'admin'
+parent_menu_link: 'system.admin_config_development'
 child_menu_links:
-  - 'admin:system.performance_settings'
-  - 'admin:system.logging_settings'
+  - 'system.performance_settings'
+  - 'system.logging_settings'

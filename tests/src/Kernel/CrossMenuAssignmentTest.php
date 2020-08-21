@@ -48,20 +48,19 @@ class CrossMenuAssignmentTest extends KernelTestBase {
   }
 
   /**
-   * Test child menu link for new groups.
-   *
-   * The menu name of a child menu link should be the same as the menu name of
-   * the parent menu link.  When they differ, the child menu link's menu name
-   * should be changed to match that of the parent menu.
+   * Test the entity form for cross menu selections.
    *
    * - Create a new group entity through form submission.  Use different
-   *   **menus** for parent and child links.
-   * - Load the newly created group entity and check the child menu links.
-   * - The menu name of the child links should match that of the parent links.
-   * - Note that the menu name appears at the beginning of a menu link id.
-   *   Example: 'foo:bar_baz'.  Here "foo" is the menu name.
+   *   **menus** for parent and child links.  For example, "account" menu for
+   *   the parent menu link and "admin" menu for child menu links.
+   * - Load the newly created group entity and check the parent menu, parent
+   *   menu link and child menu links.
+   * - The menu name for the parent menu link should be used as the parent menu
+   *   of the group.  The menu name of the child menu link should be ignored.
+   * - The menu name should **not** be present in parent menu link and child
+   *   menu links.
    */
-  public function testNewChildMenuLinkName() {
+  public function testFormSubmission() {
 
     $empty_group = LocalGovMenuLinkGroup::create();
     $create_form_obj = LocalGovMenuLinkGroupForm::create($this->container);
@@ -82,29 +81,17 @@ class CrossMenuAssignmentTest extends KernelTestBase {
     $expected_group_label = $group_label;
     $this->assertEqual($expected_group_label, $new_group->label());
 
+    $parent_menu_name = $new_group->get('parent_menu');
+    $expected_parent_menu_name = 'account';
+    $this->assertEqual($parent_menu_name, $expected_parent_menu_name);
+
+    $parent_menu_link = $new_group->get('parent_menu_link');
+    $expected_parent_menu_link = 'user.page';
+    $this->assertEqual($parent_menu_link, $expected_parent_menu_link);
+
     $child_menu_links = $new_group->get('child_menu_links');
-    $expected_child_menu_links = ['account:system.admin_content'];
+    $expected_child_menu_links = ['system.admin_content'];
     $this->assertEqual($child_menu_links, $expected_child_menu_links);
-  }
-
-  /**
-   * Test child menu link for existing groups.
-   *
-   * - Load an existing Group entity whose parent and child menus are different.
-   * - Inspect the edit form for this Group entity.
-   * - The parent and child menus should match.
-   */
-  public function testExistingChildMenuLinkName() {
-
-    $this->container->get('module_installer')->install(['group_config_test']);
-
-    $existing_group = LocalGovMenuLinkGroup::load('localgov_menu_link_group_differing_menu');
-    $this->assertNotEmpty($existing_group);
-
-    $group_update_form = $this->container->get('entity.form_builder')->getForm($existing_group);
-
-    $expected_default_child_menu_links = ['account:system.performance_settings', 'account:system.logging_settings'];
-    $this->assertEqual($group_update_form['child_menu_links']['#default_value'], $expected_default_child_menu_links);
   }
 
 }

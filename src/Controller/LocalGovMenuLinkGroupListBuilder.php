@@ -12,7 +12,6 @@ use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\localgov_menu_link_group\Entity\LocalGovMenuLinkGroupInterface;
-use Drupal\localgov_menu_link_group\MenuLinkGrouper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -66,8 +65,7 @@ class LocalGovMenuLinkGroupListBuilder extends DraggableListBuilder {
    */
   protected function determineParentMenuLinkLabel(LocalGovMenuLinkGroupInterface $group): MarkupInterface {
 
-    $parent_menu_link = $group->get('parent_menu_link');
-    list(, $parent_menu_link_id) = MenuLinkGrouper::extractMenuLinkParts($parent_menu_link);
+    $parent_menu_link_id = $group->get('parent_menu_link');
 
     $is_unknown_menu_link = !$this->menuLinkManager->hasDefinition($parent_menu_link_id);
     if ($is_unknown_menu_link) {

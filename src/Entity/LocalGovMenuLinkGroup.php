@@ -36,6 +36,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "id",
  *     "group_label",
  *     "weight",
+ *     "parent_menu",
  *     "parent_menu_link",
  *     "child_menu_links",
  *   },
@@ -49,14 +50,48 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  */
 class LocalGovMenuLinkGroup extends ConfigEntityBase implements LocalGovMenuLinkGroupInterface {
 
+  /**
+   * The entity id.
+   *
+   * @var string
+   */
   public $id;
 
+  /**
+   * Group name.
+   *
+   * This label used to prepare a menu link for this group.
+   *
+   * @var string
+   */
   public $group_label;
 
+  /**
+   * Weight of the group's menu link.
+   *
+   * @var string
+   */
   public $weight = 0;
 
-  public $parent_menu_link = 'admin:system.admin_content';
+  /**
+   * Parent menu of the group.
+   *
+   * @var string
+   */
+  public $parent_menu = 'admin';
 
+  /**
+   * Parent menu link of the group.
+   *
+   * @var string
+   */
+  public $parent_menu_link = 'system.admin_content';
+
+  /**
+   * Child menu links of the group.
+   *
+   * @var string
+   */
   public $child_menu_links = [];
 
   /**

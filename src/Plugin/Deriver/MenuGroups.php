@@ -47,15 +47,11 @@ class MenuGroups extends DeriverBase implements ContainerDeriverInterface {
    */
   public static function prepareMenuLinkForGroup(LocalGovMenuLinkGroupInterface $group, array $base_menu_link_definition): array {
 
-    // Parent menu link format: Parent-menu-name:Parent-menu-link.
-    list($menu_name) = explode(':', $group->get('parent_menu_link'));
-    $parent_menu_link = substr_replace($group->get('parent_menu_link'), '', 0, strlen($menu_name) + 1);
-
     $menu_link_for_group = [
       'id'         => $group->id(),
       'title'      => $group->label(),
-      'menu_name'  => $menu_name,
-      'parent'     => $parent_menu_link,
+      'menu_name'  => $group->get('parent_menu'),
+      'parent'     => $group->get('parent_menu_link'),
       'weight'     => $group->get('weight'),
     ] + $base_menu_link_definition;
 

@@ -12,6 +12,9 @@ localgov_menu_link_group.localgov_menu_link_group.*:
     weight:
       type: integer
       label: 'Menu link weight'
+    parent_menu:
+      type: string
+      label: 'Parent menu name'
     parent_menu_link:
       type: string
       label: 'Parent menu link'

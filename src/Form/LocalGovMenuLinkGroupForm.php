@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Menu\MenuParentFormSelectorInterface;
 use Drupal\Core\Render\ElementInfoManagerInterface;
-use Drupal\localgov_menu_link_group\MenuLinkGrouper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -24,6 +23,9 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
   public function form(array $form, FormStateInterface $form_state) {
 
     $group = $this->entity;
+    $parent_menu_name = $group->get('parent_menu');
+    $parent_menu_link = $group->get('parent_menu_link');
+    $child_menu_links = $group->get('child_menu_links');
 
     $form = parent::form($form, $form_state);
 
@@ -62,7 +64,13 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
       '#default_value' => $group->get('weight'),
     ];
 
-    $form['parent_menu_link'] = $this->menuLinkSelector->parentSelectElement($group->get('parent_menu_link'));
+    $form['parent_menu'] = [
+      '#type'  => 'value',
+      '#value' => $parent_menu_name,
+    ];
+
+    $parent_menu_link_option = $this->prepareMenuLinkOption($parent_menu_link, $parent_menu_name);
+    $form['parent_menu_link'] = $this->menuLinkSelector->parentSelectElement($parent_menu_link_option);
     $form['parent_menu_link']['#title'] = $this->t('Parent menu link');
     $form['parent_menu_link']['#description'] = $this->t('The menu link for this group will appear as a **child** of this menu link.  Example: Add content.');
     $form['parent_menu_link']['#description_display'] = TRUE;
@@ -73,7 +81,7 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
     $form['child_menu_links']['#description'] = $this->t('These will appear as children of the menu link for this group.  Example: Article, Basic page.');
     $form['child_menu_links']['#description_display'] = TRUE;
     $form['child_menu_links']['#multiple'] = TRUE;
-    $form['child_menu_links']['#default_value'] = $this->fixMenuForAllChildLinks($group->get('child_menu_links'), $group->get('parent_menu_link'));
+    $form['child_menu_links']['#default_value'] = array_map([$this, 'prepareMenuLinkOption'], $child_menu_links, array_fill(0, count($child_menu_links), $parent_menu_name));
     $form['child_menu_links']['#size'] = 20;
 
     $has_multiselect_form_element = $this->elementInfo->hasDefinition('multiselect');
@@ -86,10 +94,20 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
 
   /**
    * {@inheritdoc}
-   *
-   * Prepend the fixed prefix for new group id values.
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+
+    $this->massageFormValues($form_state);
+  }
+
+  /**
+   * Update form values before submission.
+   *
+   * - Prepend the fixed prefix for new group id values.
+   * - Strip out menu names from selected menu links.
+   * - Extract parent menu name from the selected parent menu link.
+   */
+  protected function massageFormValues(FormStateInterface $form_state) {
 
     $group = $this->entity;
 
@@ -97,10 +115,52 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
       $group_id = $form_state->getValue('id');
       $group_id_w_prefix = self::ENTITY_ID_PREFIX . $group_id;
       $form_state->setValue('id', $group_id_w_prefix);
-
-      $child_menu_links_w_parent_menu = $this->fixMenuForAllChildLinks($form_state->getValue('child_menu_links'), $form_state->getValue('parent_menu_link'));
-      $form_state->setValue('child_menu_links', $child_menu_links_w_parent_menu);
     }
+
+    list($parent_menu_name, $parent_menu_link_wo_menu_name) = self::extractMenuLinkParts($form_state->getValue('parent_menu_link'));
+    $form_state->setValue('parent_menu', $parent_menu_name);
+    $form_state->setValue('parent_menu_link', $parent_menu_link_wo_menu_name);
+
+    $child_menu_links_wo_menu_name = array_map(function (string $menu_link_value): string {
+      list(, $menu_link_id) = self::extractMenuLinkParts($menu_link_value);
+      return $menu_link_id;
+    }, $form_state->getValue('child_menu_links'));
+    $form_state->setValue('child_menu_links', $child_menu_links_wo_menu_name);
+  }
+
+  /**
+   * Extract the menu name and menu link id.
+   *
+   * The menu link names used by the menu link selection dropdown follows
+   * the following format: MENU-NAME:MENU-LINK-ID.
+   * Example: admin:admin_toolbar_tools.extra_links:node.add.article.  Here
+   * "admin" is the menu name and
+   * "admin_toolbar_tools.extra_links:node.add.article" is the menu_link_id.
+   *
+   * @return array
+   *   First item: Menu name; Second item: Menu link id.
+   *
+   * @see Drupal\Core\Menu\MenuParentFormSelector::parentSelectOptionsTreeWalk()
+   */
+  public static function extractMenuLinkParts(string $raw_menu_link): array {
+
+    list($menu_name) = explode(':', $raw_menu_link);
+    $menu_link = substr_replace($raw_menu_link, '', 0, strlen($menu_name) + 1);
+
+    return [$menu_name, $menu_link];
+  }
+
+  /**
+   * Prepend the menu name to the menu link id.
+   *
+   * The option values used in the menu link selection dropdown use this
+   * format: MENU_NAME:MENU_LINK_ID.  Example: "admin:dblog.overview" where
+   * "admin" is the menu name and "dblog.overview" is the menu link id.
+   */
+  public static function prepareMenuLinkOption(string $menu_link_id, string $menu_name): string {
+
+    $menu_link_w_menu_name = "{$menu_name}:{$menu_link_id}";
+    return $menu_link_w_menu_name;
   }
 
   /**
@@ -132,8 +192,10 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
    */
   public function exist($id) {
 
+    $group_id = self::ENTITY_ID_PREFIX . $id;
+
     $entity = $this->entityTypeManager->getStorage('localgov_menu_link_group')->getQuery()
-      ->condition('id', $id)
+      ->condition('id', $group_id)
       ->execute();
     return (bool) $entity;
   }
@@ -156,40 +218,6 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
       $container->get('menu.parent_form_selector'),
       $container->get('element_info')
     );
-  }
-
-  /**
-   * Ensure that the menu name for child menu links match the parent menu link.
-   */
-  protected function fixMenuForAllChildLinks(array $child_menu_links, string $parent_menu_link): array {
-
-    if (empty($child_menu_links) or empty($parent_menu_link)) {
-      return $child_menu_links;
-    }
-
-    list($parent_menu,) = MenuLinkGrouper::extractMenuLinkParts($parent_menu_link);
-
-    $child_menu_links_w_parent_menu = array_map([$this, 'fixMenuForChildLink'], $child_menu_links, array_fill(0, count($child_menu_links), $parent_menu));
-
-    return $child_menu_links_w_parent_menu;
-  }
-
-  /**
-   * Replace the menu name for a child menu link.
-   *
-   * The menu name for child menu links should match that of the parent menu
-   * link.
-   *
-   * Example:
-   * - child_menu_link: foo:bar
-   * - parent_menu: qux
-   * - updated child link: qux:bar
-   */
-  protected static function fixMenuForChildLink(string $child_menu_link, string $parent_menu): string {
-
-    list(, $child_menu_link_id) = MenuLinkGrouper::extractMenuLinkParts($child_menu_link);
-
-    return "$parent_menu:$child_menu_link_id";
   }
 
   /**
