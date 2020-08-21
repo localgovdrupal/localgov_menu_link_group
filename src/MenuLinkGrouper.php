@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\localgov_menu_link_group;
 
+use Drupal\Component\Utility\Html;
 use Drupal\localgov_menu_link_group\Entity\LocalGovMenuLinkGroupInterface;
 
 /**
@@ -35,22 +36,43 @@ class MenuLinkGrouper {
    */
   public function groupChildMenuLinks(LocalGovMenuLinkGroupInterface $group, string $group_id): void {
 
+    $group_menu_index = self::prepareMenuLinkIndexForGroup($group);
+
     $child_menu_links = $group->get('child_menu_links');
-    array_walk($child_menu_links, [$this, 'setNewParentForChildMenuLink'], $group_id);
+    array_walk($child_menu_links, [$this, 'setNewParentForChildMenuLink'], $group_menu_index);
   }
 
   /**
    * Reassign the parent menu link for a child menu link of a group.
    */
-  protected function setNewParentForChildMenuLink(string $child_menu_link_id, string $ignore, string $group_id): void {
+  public function setNewParentForChildMenuLink(string $child_menu_link_id, string $ignore, string $group_menu_index): void {
 
     $is_unknown_child_menu_link = !array_key_exists($child_menu_link_id, $this->menuLinks);
     if ($is_unknown_child_menu_link) {
       return;
     }
 
-    $group_menu_link_id = "localgov_menu_link_group:$group_id";
+    $group_menu_link_id = "localgov_menu_link_group:$group_menu_index";
     $this->menuLinks[$child_menu_link_id]['parent'] = $group_menu_link_id;
+  }
+
+  /**
+   * Use the parent menu link and group label to prepare a menu link index.
+   *
+   * Example:
+   * - Group label: Service
+   * - Parent menu link: system.admin_config_development
+   * - Menu link index: system.admin_config_development:service.
+   *
+   * Note that the menu link index is not the same as the menu link id.  It
+   * forms a part of the full menu link id.
+   */
+  public static function prepareMenuLinkIndexForGroup(LocalGovMenuLinkGroupInterface $group): string {
+
+    $machine_name_for_label = str_replace('-', '_', Html::getClass($group->label()));
+    $menu_link_index = "{$group->get('parent_menu_link')}:{$machine_name_for_label}";
+
+    return $menu_link_index;
   }
 
   /**

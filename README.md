@@ -39,6 +39,7 @@ This grouping functionality is not limited to content types only.  It can be app
   - From the Group add/edit form.
   - By drag-and-drop from the group listing page at /admin/structure/menu/localgov_menu_link_group
 - The group configurations are fully exportable and importable like any other Drupal configuration file.
+- By using the same Group label and parent menu link, multiple groups can be part of the same menu link group.  This could be useful when you are providing configration files from multiple modules.
 
 ## Todo
 - Unit tests.
