@@ -30,7 +30,6 @@ This grouping functionality is not limited to content types only.  It can be app
 - While adding the group, decide where in the menu tree this group should appear.  Choose your selection from the **Parent menu link** dropdown.
 - Use the **Child menu links** dropdown to select the menu links that should come under this new group.
 - Save the Group form.
-- Clear the menu cache or entire Drupal cache.
 - A menu link with your choosen group label should appear in the menu tree under your choosen parent menu link.  This menu link is not clickable.
 - Hovering over this menu link should reveal its child menu links.
 
@@ -40,6 +39,7 @@ This grouping functionality is not limited to content types only.  It can be app
   - From the Group add/edit form.
   - By drag-and-drop from the group listing page at /admin/structure/menu/localgov_menu_link_group
 - The group configurations are fully exportable and importable like any other Drupal configuration file.
+- By using the same Group label and parent menu link, multiple groups can be part of the same menu link group.  This could be useful when you are providing configration files from multiple modules.
 
 ## Todo
 - Unit tests.
