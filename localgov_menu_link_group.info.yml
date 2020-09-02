@@ -1,5 +1,5 @@
 type: module
-name: LocalGovDrupal menu link group
+name: LocalGov menu link group
 description: Present menu links in groups.
-package: LocalGovDrupal
+package: LocalGov Drupal
 core_version_requirement: ^8.8 || ^9
