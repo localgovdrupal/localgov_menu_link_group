@@ -14,18 +14,19 @@ use Drupal\Core\Menu\MenuTreeParameters;
 /**
  * Implements hook_preprocess_menu().
  */
-function localGov_menu_link_group_preprocess_menu(&$variables) {
+function localgov_menu_link_group_preprocess_menu(&$variables) {
   _localgov_menu_link_group_filter_menu($variables['items'], $variables['menu_name']);
 }
 
 /**
- * Filter menu
+ * Filter menu.
  *
  * Walk through the menu tree to find menu link groups, and remove any that
  * the current user does not have access to any child items.
- * @param  array $items
+ *
+ * @param array $items
  *   (By reference) Menu items tree passed from hook_preprocess_menu.
- * @param  string $menu_name
+ * @param string $menu_name
  *   Menu name.
  */
 function _localgov_menu_link_group_filter_menu(array &$items, string $menu_name) {
@@ -37,13 +38,13 @@ function _localgov_menu_link_group_filter_menu(array &$items, string $menu_name)
       // localgov_menu_group menu link in the 'below' array.
       $menu_tree_params = new MenuTreeParameters();
       $menu_tree_params->setRoot($item['original_link']->getPluginId())
-                       ->excludeRoot()
-                       ->setMaxDepth(1)
-                       ->onlyEnabledLinks();
+        ->excludeRoot()
+        ->setMaxDepth(1)
+        ->onlyEnabledLinks();
       $tree = \Drupal::menuTree()->load($menu_name, $menu_tree_params);
 
       // Test if the user has access to any menu items in this menu group.
-      $enabled = array_map(function($subtree_item) {
+      $enabled = array_map(function ($subtree_item) {
         $route_name = $subtree_item->link->getRouteName();
         $route_parameters = $subtree_item->link->getRouteParameters();
         return (bool) \Drupal::accessManager()->checkNamedRoute($route_name, $route_parameters);
