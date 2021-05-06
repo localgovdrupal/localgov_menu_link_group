@@ -21,7 +21,7 @@ class GroupConfigImportTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'localgov_menu_link_group'];
+  protected static $modules = ['system', 'localgov_menu_link_group'];
 
   /**
    * Test that child menu links have been rearranged under a group.
@@ -41,7 +41,7 @@ class GroupConfigImportTest extends KernelTestBase {
       'system.performance_settings' => 'system.performance_settings',
       'system.logging_settings'     => 'system.logging_settings',
     ];
-    $this->assertEqual($child_menu_links, $expected_child_menu_links);
+    $this->assertEquals($child_menu_links, $expected_child_menu_links);
     $has_parent_menu_link = in_array('system.admin_config_development', $parent_menu_links);
     $this->assertTrue($has_parent_menu_link);
   }
@@ -67,7 +67,7 @@ class GroupConfigImportTest extends KernelTestBase {
       // Child menu links from the second "Misc" group.
       'system.admin_config_search'  => 'system.admin_config_search',
     ];
-    $this->assertEqual($child_menu_links, $expected_child_menu_links);
+    $this->assertEquals($child_menu_links, $expected_child_menu_links);
 
     $has_parent_menu_link = in_array('system.admin_config_development', $parent_menu_links);
     $this->assertTrue($has_parent_menu_link);
