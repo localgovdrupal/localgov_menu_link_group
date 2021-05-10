@@ -39,7 +39,15 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
       '#required' => TRUE,
     ];
 
-    list($field_prefix, $field_suffix) = $group->isNew() ? ['<span dir="ltr">' . self::ENTITY_ID_PREFIX, '</span>&lrm;'] : ['', ''];
+    if ($group->isNew()) {
+      $field_prefix = '<span dir="ltr">' . self::ENTITY_ID_PREFIX;
+      $field_suffix = '</span>&lrm;';
+    }
+    else {
+      $field_prefix = '';
+      $field_suffix = '';
+    }
+
     $form['id'] = [
       '#type'  => 'machine_name',
       '#default_value' => $group->id(),
@@ -81,7 +89,8 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
     $form['child_menu_links']['#description'] = $this->t('These will appear as children of the menu link for this group.  Example: Article, Basic page.');
     $form['child_menu_links']['#description_display'] = TRUE;
     $form['child_menu_links']['#multiple'] = TRUE;
-    $form['child_menu_links']['#default_value'] = array_map([$this, 'prepareMenuLinkOption'], $child_menu_links, array_fill(0, count($child_menu_links), $parent_menu_name));
+    $default_value = array_map([$this, 'prepareMenuLinkOption'], $child_menu_links, array_fill(0, count($child_menu_links), $parent_menu_name));
+    $form['child_menu_links']['#default_value'] = $default_value;
     $form['child_menu_links']['#size'] = 20;
 
     $has_multiselect_form_element = $this->elementInfo->hasDefinition('multiselect');
