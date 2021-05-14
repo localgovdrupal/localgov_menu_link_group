@@ -15,6 +15,7 @@ use Drupal\Core\Menu\MenuTreeParameters;
  * Implements hook_preprocess_menu().
  */
 function localgov_menu_link_group_preprocess_menu(&$variables) {
+  $variables['menu_name'] = $variables['menu_name'] ?? 'admin';
   _localgov_menu_link_group_filter_menu($variables['items'], $variables['menu_name']);
 }
 
