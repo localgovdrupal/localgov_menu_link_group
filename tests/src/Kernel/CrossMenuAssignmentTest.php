@@ -23,12 +23,12 @@ class CrossMenuAssignmentTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'user', 'localgov_menu_link_group'];
+  protected static $modules = ['system', 'user', 'localgov_menu_link_group'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
 
     parent::setUp();
 
@@ -79,19 +79,19 @@ class CrossMenuAssignmentTest extends KernelTestBase {
 
     $new_group = LocalGovMenuLinkGroup::load(LocalGovMenuLinkGroupForm::ENTITY_ID_PREFIX . $group_id);
     $expected_group_label = $group_label;
-    $this->assertEqual($expected_group_label, $new_group->label());
+    $this->assertEquals($expected_group_label, $new_group->label());
 
     $parent_menu_name = $new_group->get('parent_menu');
     $expected_parent_menu_name = 'account';
-    $this->assertEqual($parent_menu_name, $expected_parent_menu_name);
+    $this->assertEquals($parent_menu_name, $expected_parent_menu_name);
 
     $parent_menu_link = $new_group->get('parent_menu_link');
     $expected_parent_menu_link = 'user.page';
-    $this->assertEqual($parent_menu_link, $expected_parent_menu_link);
+    $this->assertEquals($parent_menu_link, $expected_parent_menu_link);
 
     $child_menu_links = $new_group->get('child_menu_links');
     $expected_child_menu_links = ['system.admin_content'];
-    $this->assertEqual($child_menu_links, $expected_child_menu_links);
+    $this->assertEquals($child_menu_links, $expected_child_menu_links);
   }
 
 }
