@@ -126,12 +126,12 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
       $form_state->setValue('id', $group_id_w_prefix);
     }
 
-    list($parent_menu_name, $parent_menu_link_wo_menu_name) = self::extractMenuLinkParts($form_state->getValue('parent_menu_link'));
+    [$parent_menu_name, $parent_menu_link_wo_menu_name] = self::extractMenuLinkParts($form_state->getValue('parent_menu_link'));
     $form_state->setValue('parent_menu', $parent_menu_name);
     $form_state->setValue('parent_menu_link', $parent_menu_link_wo_menu_name);
 
     $child_menu_links_wo_menu_name = array_map(function (string $menu_link_value): string {
-      list(, $menu_link_id) = self::extractMenuLinkParts($menu_link_value);
+      [, $menu_link_id] = self::extractMenuLinkParts($menu_link_value);
       return $menu_link_id;
     }, $form_state->getValue('child_menu_links'));
     $form_state->setValue('child_menu_links', $child_menu_links_wo_menu_name);
@@ -153,7 +153,7 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
    */
   public static function extractMenuLinkParts(string $raw_menu_link): array {
 
-    list($menu_name) = explode(':', $raw_menu_link);
+    [$menu_name] = explode(':', $raw_menu_link);
     $menu_link = substr_replace($raw_menu_link, '', 0, strlen($menu_name) + 1);
 
     return [$menu_name, $menu_link];
