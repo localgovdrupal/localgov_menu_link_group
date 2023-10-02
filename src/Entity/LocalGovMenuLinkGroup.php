@@ -111,7 +111,7 @@ class LocalGovMenuLinkGroup extends ConfigEntityBase implements LocalGovMenuLink
       $value = array_values($value);
     }
 
-    parent::set($property_name, $value);
+    return parent::set($property_name, $value);
   }
 
 }

@@ -192,6 +192,8 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
     }
 
     $form_state->setRedirect('entity.localgov_menu_link_group.collection');
+
+    return $status;
   }
 
   /**

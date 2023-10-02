@@ -43,3 +43,14 @@ This grouping functionality is not limited to content types only.  It can be app
 
 ## Todo
 - Unit tests.
+
+
+
+## Maintainers
+
+This project is currently maintained by: 
+
+ - Finn Lewis: https://www.drupal.org/u/finn-lewis
+ - Stephen: https://www.drupal.org/u/stephen-cox
+ - Adnan: https://github.com/Adnan-cds
+ - Andy Broomfield: https://www.drupal.org/u/andybroomfield
