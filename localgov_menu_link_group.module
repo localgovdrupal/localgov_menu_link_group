@@ -12,6 +12,18 @@ use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\localgov_menu_link_group\MenuLinkGrouper;
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function localgov_menu_link_group_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'menu_links_discovered_alter') {
+    // Move localgov_menu_link_group to last hook.
+    $implementation = $implementations['localgov_menu_link_group'];
+    unset($implementations['localgov_menu_link_group']);
+    $implementations['localgov_menu_link_group'] = $implementation;
+  }
+}
+
+/**
  * Implements hook_preprocess_menu().
  */
 function localgov_menu_link_group_preprocess_menu(&$variables) {
