@@ -28,7 +28,7 @@ class CrossMenuAssignmentTest extends EntityKernelTestBase {
     'node',
     'localgov_core',
     'localgov_admin_role',
-    'localgov_menu_link_group'
+    'localgov_menu_link_group',
   ];
 
   /**
