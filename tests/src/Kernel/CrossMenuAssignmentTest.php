@@ -6,7 +6,6 @@ use Drupal\Core\Form\FormState;
 use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 use Drupal\localgov_menu_link_group\Entity\LocalGovMenuLinkGroup;
 use Drupal\localgov_menu_link_group\Form\LocalGovMenuLinkGroupForm;
-use Drupal\user\Entity\User;
 
 /**
  * Tests for the Entity form.
@@ -23,7 +22,14 @@ class CrossMenuAssignmentTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'user', 'node', 'localgov_core', 'localgov_admin_role', 'localgov_menu_link_group'];
+  protected static $modules = [
+    'system',
+    'user',
+    'node',
+    'localgov_core',
+    'localgov_admin_role',
+    'localgov_menu_link_group'
+  ];
 
   /**
    * {@inheritdoc}
