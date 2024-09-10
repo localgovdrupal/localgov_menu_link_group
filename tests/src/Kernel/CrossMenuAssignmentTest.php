@@ -3,10 +3,9 @@
 namespace Drupal\Tests\localgov_menu_link_group\Kernel;
 
 use Drupal\Core\Form\FormState;
-use Drupal\KernelTests\KernelTestBase;
+use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 use Drupal\localgov_menu_link_group\Entity\LocalGovMenuLinkGroup;
 use Drupal\localgov_menu_link_group\Form\LocalGovMenuLinkGroupForm;
-use Drupal\user\Entity\User;
 
 /**
  * Tests for the Entity form.
@@ -16,14 +15,21 @@ use Drupal\user\Entity\User;
  *
  * @group localgov_menu_link_group
  */
-class CrossMenuAssignmentTest extends KernelTestBase {
+class CrossMenuAssignmentTest extends EntityKernelTestBase {
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  protected static $modules = ['system', 'user', 'localgov_menu_link_group'];
+  protected static $modules = [
+    'system',
+    'user',
+    'node',
+    'localgov_core',
+    'localgov_admin_role',
+    'localgov_menu_link_group',
+  ];
 
   /**
    * {@inheritdoc}
@@ -38,11 +44,8 @@ class CrossMenuAssignmentTest extends KernelTestBase {
     $this->installEntitySchema('localgov_menu_link_group');
     $this->container->get('plugin.manager.menu.link')->rebuild();
 
-    $admin_user = User::create([
-      'name' => 'admin',
-      'mail' => 'admin@example.net',
-    ]);
-    $admin_user->addRole('administrator');
+    $admin_user = $this->createUser([], 'admin', TRUE, ['mail' => 'admin@example.net']);
+    $admin_user->addRole('localgov_admin');
     $admin_user->save();
     $this->container->get('current_user')->setAccount($admin_user);
   }
