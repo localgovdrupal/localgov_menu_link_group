@@ -44,7 +44,7 @@ class LocalGovMenuLinkGroupListBuilder extends DraggableListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $group) {
-
+    /** @var \Drupal\localgov_menu_link_group\Entity\LocalGovMenuLinkGroup $group */
     $row['label'] = $group->label();
 
     $row['parent'] = [

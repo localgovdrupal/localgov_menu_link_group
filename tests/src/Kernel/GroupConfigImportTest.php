@@ -42,7 +42,7 @@ class GroupConfigImportTest extends KernelTestBase {
       'system.logging_settings'     => 'system.logging_settings',
     ];
     $this->assertEquals($child_menu_links, $expected_child_menu_links);
-    $has_parent_menu_link = in_array('system.admin_config_development', $parent_menu_links);
+    $has_parent_menu_link = in_array('system.admin_config_development', $parent_menu_links, TRUE);
     $this->assertTrue($has_parent_menu_link);
   }
 
@@ -69,7 +69,7 @@ class GroupConfigImportTest extends KernelTestBase {
     ];
     $this->assertEquals($child_menu_links, $expected_child_menu_links);
 
-    $has_parent_menu_link = in_array('system.admin_config_development', $parent_menu_links);
+    $has_parent_menu_link = in_array('system.admin_config_development', $parent_menu_links, TRUE);
     $this->assertTrue($has_parent_menu_link);
   }
 
