@@ -44,7 +44,7 @@ class LocalGovMenuLinkGroupListBuilder extends DraggableListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $group) {
-
+    assert($group instanceof LocalGovMenuLinkGroupInterface);
     $row['label'] = $group->label();
 
     $row['parent'] = [

@@ -88,6 +88,7 @@ function localgov_menu_link_group_menu_links_discovered_alter(array &$menu_links
   $active_groups = Drupal::service('entity_type.manager')->getStorage('localgov_menu_link_group')->loadByProperties(['status' => 1]);
 
   $menu_link_grouper = new MenuLinkGrouper($menu_links);
+  // @phpstan-ignore-next-line Ignore the next line, it is correct but PHPStan cannot infer the type correctly.
   array_walk($active_groups, [$menu_link_grouper, 'groupChildMenuLinks']);
 }
 
