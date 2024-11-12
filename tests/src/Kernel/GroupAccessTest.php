@@ -61,7 +61,7 @@ class GroupAccessTest extends KernelTestBase {
     $toolbar = toolbar_get_rendered_subtrees();
     $rendered_config_menu_markup = (string) $toolbar[0]['system-admin_config'];
     $dom = Html::load($rendered_config_menu_markup);
-    $xpath = new \DomXPath($dom);
+    $xpath = new \DOMXPath($dom);
 
     $has_test_group = ($xpath->query('//span[text()="Test"]')->count() === 1);
     $this->assertTrue($has_test_group);
@@ -76,7 +76,7 @@ class GroupAccessTest extends KernelTestBase {
     $toolbar = toolbar_get_rendered_subtrees();
     $rendered_config_menu_markup = (string) $toolbar[0]['system-admin_config'];
     $dom = Html::load($rendered_config_menu_markup);
-    $xpath = new \DomXPath($dom);
+    $xpath = new \DOMXPath($dom);
 
     $has_test_group = ($xpath->query('//span[text()="Test"]')->count() === 1);
     $this->assertFalse($has_test_group);

@@ -77,7 +77,7 @@ class LocalGovMenuLinkGroupForm extends EntityForm {
       '#value' => $parent_menu_name,
     ];
 
-    $parent_menu_link_option = $this->prepareMenuLinkOption($parent_menu_link, $parent_menu_name);
+    $parent_menu_link_option = self::prepareMenuLinkOption($parent_menu_link, $parent_menu_name);
     $form['parent_menu_link'] = $this->menuLinkSelector->parentSelectElement($parent_menu_link_option);
     $form['parent_menu_link']['#title'] = $this->t('Parent menu link');
     $form['parent_menu_link']['#description'] = $this->t('The menu link for this group will appear as a **child** of this menu link.  Example: Add content.');
