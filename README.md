@@ -22,7 +22,7 @@ Here we have defined the Birds, Fruits, and Mammals groups and decided which men
 
 This grouping functionality is not limited to content types only.  It can be applied to any menu link.
 
-## How to use it
+## Usage
 - Install the localgov_menu_link_group module in the usual way.
 - Login as a site admin or any other user with the **administer site configuration** permission.
 - Head to /admin/structure/menu/localgov_menu_link_group
@@ -39,12 +39,33 @@ This grouping functionality is not limited to content types only.  It can be app
   - From the Group add/edit form.
   - By drag-and-drop from the group listing page at /admin/structure/menu/localgov_menu_link_group
 - The group configurations are fully exportable and importable like any other Drupal configuration file.
-- By using the same Group label and parent menu link, multiple groups can be part of the same menu link group.  This could be useful when you are providing configration files from multiple modules.
+
+
+## Developer notes
+Menu link groups are stored as config entities.  This means other modules can provide new menu link groups or add menu links to existing menu link groups.  The [localgov_services module is a good example](https://github.com/localgovdrupal/localgov_services/blob/2.x/config/optional/localgov_menu_link_group.localgov_menu_link_group.localgov_menu_link_group_services.yml) of a module that defines a new menu link group.
+
+If, on the other hand, you want to add menu links to an **existing** menu link group, please ensure the `group_label` and `parent_menu_link` keys in the config file are assigned the same value as the target menu link group and its parent.  In the following example, we are adding two new menu links to the existing `Services` menu link group:
+```
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - localgov_services
+      - localgov_menu_link_group
+id: localgov_menu_link_group_foo
+group_label: Services
+weight: 9
+parent_menu: admin
+parent_menu_link: 'admin_toolbar_tools.extra_links:node.add'
+child_menu_links:
+  - 'admin_toolbar_tools.extra_links:node.add.foo'
+  - 'admin_toolbar_tools.extra_links:node.add.bar'
+```
+The above should go into the `localgov_menu_link_group.localgov_menu_link_group.localgov_menu_link_group_foo.yml` file and placed within the `config/optional/` directory of a module.
 
 ## Todo
 - Unit tests.
-
-
 
 ## Maintainers
 
