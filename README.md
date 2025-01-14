@@ -44,7 +44,7 @@ This grouping functionality is not limited to content types only.  It can be app
 ## Developer notes
 Menu link groups are stored as config entities.  This means other modules can provide new menu link groups or add menu links to existing menu link groups.  The [localgov_services module is a good example](https://github.com/localgovdrupal/localgov_services/blob/2.x/config/optional/localgov_menu_link_group.localgov_menu_link_group.localgov_menu_link_group_services.yml) of a module that defines a new menu link group.
 
-If, on the other hand, you want to add menu links to an **existing** menu link group, please ensure the `group_label` and `parent_menu_link` keys in the config file are assigned the same value as the target menu link group and its parent.  In the following example, we are adding two new menu links to the existing `Services` menu link group:
+If, on the other hand, we want to add menu links to an **existing** menu link group, we need to ensure the `group_label` and `parent_menu_link` keys in the config file are assigned the same value as the target menu link group and its parent.  In the following example, we have copied an existing config item, and are adding two new menu links to the existing `Services` menu link group with a new config ID `localgov_menu_link_group_foo`:
 ```
 langcode: en
 status: true
