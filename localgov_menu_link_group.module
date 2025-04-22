@@ -44,7 +44,7 @@ function localgov_menu_link_group_preprocess_menu(&$variables) {
  */
 function _localgov_menu_link_group_filter_menu(array &$items, string $menu_name) {
   foreach ($items as $route => &$item) {
-    if (strpos($route, 'localgov_menu_link_group') === 0) {
+    if (gettype($route) === 'string' && strpos($route, 'localgov_menu_link_group') === 0) {
 
       // Load up the menu tree from this point using the Menu tree service.
       // Has to be done this was as the menu child items don't appear in a
